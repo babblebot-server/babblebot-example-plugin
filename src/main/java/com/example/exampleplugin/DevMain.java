@@ -1,10 +1,13 @@
 package com.example.exampleplugin;
 
+import com.example.exampleplugin.config.ExamplePluginConfig;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import net.bdavies.babblebot.BabblebotApplication;
 import net.bdavies.babblebot.api.IApplication;
 import net.bdavies.babblebot.api.config.EPluginPermission;
 import net.bdavies.babblebot.api.plugins.PluginType;
+import net.bdavies.babblebot.plugins.PluginConfigParser;
 import net.bdavies.babblebot.plugins.PluginModel;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -35,10 +38,15 @@ public class DevMain {
     }
 
     @Bean
-    CommandLineRunner onBoot(GenericApplicationContext gac, IApplication app) {
+    CommandLineRunner onBoot(GenericApplicationContext gac, IApplication app, PluginConfigParser parser) {
         return args -> {
             gac.registerBean(ExamplePlugin.class);
             ExamplePlugin plugin = app.get(ExamplePlugin.class);
+            val configObj = ExamplePluginConfig.builder()
+                    .someValue("Test")
+                    .build();
+            gac.registerBean(ExamplePluginConfig.class, () -> configObj);
+            String config = parser.pluginConfigToString(configObj);
             app.getPluginContainer()
                     .addPlugin(
                             plugin,
@@ -46,7 +54,7 @@ public class DevMain {
                                     .builder()
                                     .name("example")
                                     .pluginType(PluginType.JAVA)
-                                    .config("{}")
+                                    .config(config)
                                     .namespace("ep")
                                     .pluginPermissions(EPluginPermission.all())
                                     .build()

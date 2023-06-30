@@ -1,5 +1,6 @@
 package com.example.exampleplugin;
 
+import com.example.exampleplugin.config.ExamplePluginConfig;
 import com.example.exampleplugin.model.TestEntity;
 import com.example.exampleplugin.model.TestRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,11 @@ public class ExamplePlugin {
         tests.forEach(t -> em.addField(t.getName(), String.valueOf(t.getId()), false));
 
         return em;
+    }
+
+    @Command(description = "Get plugin config")
+    public String config(DiscordMessage message, ICommandContext context, ExamplePluginConfig config) {
+        return config.toString();
     }
 }
 
