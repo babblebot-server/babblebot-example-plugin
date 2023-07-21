@@ -21,7 +21,7 @@ public class GetConfigCommandTest {
     @DisplayName("Test the Get config command returns the config!")
     void testConfigCommand() {
         ExamplePluginConfig config = ExamplePluginConfig.builder()
-                .someValue("Test")
+                .someValue("test")
                 .build();
         String resp = configCommand.execute(config);
         assertEquals(config.toString(), resp);

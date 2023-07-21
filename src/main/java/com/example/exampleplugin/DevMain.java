@@ -1,6 +1,9 @@
 package com.example.exampleplugin;
 
+import com.example.exampleplugin.config.DevProperties;
 import com.example.exampleplugin.config.ExamplePluginConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import net.babblebot.BabblebotApplication;
@@ -62,13 +65,16 @@ public class DevMain {
                 );
     }
 
-    private String setupPluginConfig(GenericApplicationContext gac, PluginConfigParser parser) {
-
-        val configObj = ExamplePluginConfig.builder()
-                .someValue("Test")
-                .build();
-        gac.registerBean(ExamplePluginConfig.class, () -> configObj);
-        return parser.pluginConfigToString(configObj);
+    @SneakyThrows
+    private String setupPluginConfig(GenericApplicationContext gac,
+                                     PluginConfigParser parser) {
+        val properties = gac.getBean(DevProperties.class);
+        val pluginProps = properties.getPlugin();
+        val str = parser.pluginConfigToString(pluginProps);
+        ObjectMapper mapper = new ObjectMapper();
+        ExamplePluginConfig config = mapper.readValue(str, ExamplePluginConfig.class);
+        gac.registerBean(ExamplePluginConfig.class, () -> config);
+        return parser.pluginConfigToString(config);
     }
 
     private void registerPluginToDependencyInjector(GenericApplicationContext gac) {

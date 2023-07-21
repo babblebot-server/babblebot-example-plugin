@@ -20,9 +20,13 @@ this example includes how to implement Plugin Config and a Database Entity
 | config     | The config command will return the config for this plugin                                 | 1.0.0 | None   |
 
 ## Config
+
 | Name      | Description               | Default | Required |
 |-----------|---------------------------|---------|----------|
- | someValue | Some value for the config | null    | no       |
+| someValue | Some value for the config | null    | no       |
+
+NOTE: When developing this plugin you can set the config values using the application.properties
+under the plugin prefix
 
 ## Building & Running & Packaging
 

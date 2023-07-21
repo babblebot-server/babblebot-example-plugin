@@ -2,6 +2,7 @@ package com.example.exampleplugin.config;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 import lombok.extern.slf4j.Slf4j;
 import net.babblebot.api.plugins.PluginConfig;
 
@@ -15,6 +16,7 @@ import net.babblebot.api.plugins.PluginConfig;
 @Slf4j
 @Data
 @Builder
+@Jacksonized
 public class ExamplePluginConfig {
-    private final String someValue;
+    private String someValue;
 }
