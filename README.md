@@ -19,6 +19,11 @@ this example includes how to implement Plugin Config and a Database Entity
 | listpeople | The list people command will return all the people in the database                        | 1.0.0 | None   |
 | config     | The config command will return the config for this plugin                                 | 1.0.0 | None   |
 
+## Config
+| Name      | Description               | Default | Required |
+|-----------|---------------------------|---------|----------|
+ | someValue | Some value for the config | null    | no       |
+
 ## Building & Running & Packaging
 
 To build this plugin you can run
