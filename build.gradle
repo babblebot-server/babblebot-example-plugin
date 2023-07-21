@@ -6,29 +6,30 @@ plugins {
 sourceCompatibility = '17'
 targetCompatibility = '17'
 
-ext {
-    mainDevClass = 'com.example.exampleplugin.DevMain'
-}
-
 group 'com.example'
+
+ext {
+    mainDevClass = "${project.group}.${rootProject.name}.DevMain".toString()
+    babblebotVersion = 'v3.0.0-rc.26'
+}
 
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
+    maven { url 'https://maven.babblebot.net/' }
 }
 
 project.configurations.api.canBeResolved(true)
 
 dependencies {
-    implementation 'com.github.bendavies99:BabbleBot-Server:v3.0.0-rc.19'
+    implementation "net.babblebot:server:${babblebotVersion}"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa:3.1.0"
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
     implementation 'org.slf4j:slf4j-api:2.0.7'
 }
 
 shadowJar {
-    archivesBaseName = 'testplugin'
+    archivesBaseName = rootProject.name
     exclude("${project.mainDevClass.replace('.', '/')}*")
     configurations = [project.configurations.api]
     archiveAppendix = ''
@@ -38,9 +39,25 @@ jar {
     exclude("${project.mainDevClass.replace('.', '/')}*")
 }
 
+task generateVersionFile {
+    group 'babblebot'
+    doLast {
+        String version = project.babblebotVersion
+        if (version.startsWith("v")) {
+            version = version.substring(1)
+        }
+        def file = new File("$project.buildDir/resources/main/version.txt")
+        if (!file.exists()) {
+            println("Ran Create Properties")
+            new File("$project.buildDir/resources/main/").mkdirs()
+            file.createNewFile()
+        }
+        file.write(version)
+    }
+}
 
 task runBabblebot(type: JavaExec) {
-    dependsOn build
+    dependsOn build, generateVersionFile
     main = project.mainDevClass
     classpath = sourceSets.main.runtimeClasspath
     group 'babblebot'

@@ -3,7 +3,7 @@ package com.example.exampleplugin.config;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import net.bdavies.babblebot.api.plugins.PluginConfig;
+import net.babblebot.api.plugins.PluginConfig;
 
 /**
  * Edit me

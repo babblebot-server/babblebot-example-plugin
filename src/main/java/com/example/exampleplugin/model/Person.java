@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
-public class TestEntity {
+public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final int id;

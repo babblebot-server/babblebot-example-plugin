@@ -1,18 +1,20 @@
 package com.example.exampleplugin;
 
+import com.example.exampleplugin.command.AddPersonCommand;
+import com.example.exampleplugin.command.GetConfigCommand;
+import com.example.exampleplugin.command.ListPeopleCommand;
+import com.example.exampleplugin.command.PingCommand;
 import com.example.exampleplugin.config.ExamplePluginConfig;
-import com.example.exampleplugin.model.TestEntity;
-import com.example.exampleplugin.model.TestRepository;
+import com.example.exampleplugin.model.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import net.bdavies.babblebot.api.command.Command;
-import net.bdavies.babblebot.api.command.CommandExample;
-import net.bdavies.babblebot.api.command.CommandParam;
-import net.bdavies.babblebot.api.command.ICommandContext;
-import net.bdavies.babblebot.api.obj.message.discord.DiscordMessage;
-import net.bdavies.babblebot.api.obj.message.discord.embed.EmbedMessage;
-import net.bdavies.babblebot.api.plugins.Plugin;
+import net.babblebot.api.command.Command;
+import net.babblebot.api.command.CommandExample;
+import net.babblebot.api.command.CommandParam;
+import net.babblebot.api.command.ICommandContext;
+import net.babblebot.api.obj.message.discord.DiscordMessage;
+import net.babblebot.api.obj.message.discord.embed.EmbedMessage;
+import net.babblebot.api.plugins.Plugin;
 
 /**
  * Edit me
@@ -24,41 +26,32 @@ import net.bdavies.babblebot.api.plugins.Plugin;
 @RequiredArgsConstructor
 @Slf4j
 public class ExamplePlugin {
-    private final TestRepository repository;
+    private final PersonRepository repository;
+    private final PingCommand pingCommand;
+    private final AddPersonCommand addPersonCommand;
+    private final ListPeopleCommand listPeopleCommand;
+    private final GetConfigCommand getConfigCommand;
 
     @Command(description = "Ping the bot!")
     public String ping(DiscordMessage message, ICommandContext context) {
-        return "pong!";
+        return pingCommand.execute();
     }
 
-    @Command(aliases = "addtest", description = "Add a test name to the system")
+    @Command(aliases = "addperson", description = "Add a person to the system")
     @CommandParam(value = "name", canBeEmpty = false, optional = false, exampleValue = "john")
     @CommandExample("${commandName} -name=John")
-    public EmbedMessage addTest(DiscordMessage message, ICommandContext context) {
-        val e = repository.saveAndFlush(TestEntity.builder()
-                .name(context.getParameter("name"))
-                .build());
-
-        return EmbedMessage.builder()
-                .title("Saved")
-                .description(e.toString())
-                .build();
+    public EmbedMessage addPerson(DiscordMessage message, ICommandContext context) {
+        return addPersonCommand.execute(message, context);
     }
 
-    @Command(aliases = "listtest", description = "list all the test names")
-    public EmbedMessage listTest(DiscordMessage message, ICommandContext context) {
-        val tests = repository.findAll();
-        val em = EmbedMessage.builder()
-                .title("All Tests")
-                .build();
-        tests.forEach(t -> em.addField(t.getName(), String.valueOf(t.getId()), false));
-
-        return em;
+    @Command(aliases = "listpeople", description = "list all the people")
+    public EmbedMessage listPeople(DiscordMessage message, ICommandContext context) {
+        return listPeopleCommand.execute(message, context);
     }
 
     @Command(description = "Get plugin config")
     public String config(DiscordMessage message, ICommandContext context, ExamplePluginConfig config) {
-        return config.toString();
+        return getConfigCommand.execute(config);
     }
 }
 

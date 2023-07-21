@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  * @since 1.0.0
  */
 @Repository
-public interface TestRepository extends JpaRepository<TestEntity, Integer> {
+public interface PersonRepository extends JpaRepository<Person, Integer> {
 }
