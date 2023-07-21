@@ -37,12 +37,14 @@ tasks.named('test') {
 shadowJar {
     archivesBaseName = rootProject.name
     exclude("${project.mainDevClass.replace('.', '/')}*")
+    exclude("${project.mainDevClass.replace('.', '/').replace('DevMain', 'config/DevProperties')}*")
     configurations = [project.configurations.api]
     archiveAppendix = ''
 }
 
 jar {
     exclude("${project.mainDevClass.replace('.', '/')}*")
+    exclude("${project.mainDevClass.replace('.', '/').replace('DevMain', 'config/DevProperties')}*")
 }
 
 task generateVersionFile {
