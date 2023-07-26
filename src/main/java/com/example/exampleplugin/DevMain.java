@@ -9,6 +9,7 @@ import lombok.val;
 import net.babblebot.BabblebotApplication;
 import net.babblebot.api.IApplication;
 import net.babblebot.api.config.EPluginPermission;
+import net.babblebot.api.plugins.IPluginContainer;
 import net.babblebot.api.plugins.PluginType;
 import net.babblebot.plugins.PluginConfigParser;
 import net.babblebot.plugins.PluginModel;
@@ -51,12 +52,12 @@ public class DevMain {
     }
 
     private void addPluginToPluginContainer(ExamplePlugin plugin, IApplication app, String config) {
-        app.getPluginContainer()
+        IPluginContainer container = app.get(IPluginContainer.class);
+        container
                 .addPlugin(
                         plugin,
                         PluginModel
                                 .builder()
-                                .name("example")
                                 .pluginType(PluginType.JAVA)
                                 .config(config)
                                 .namespace("ep")
@@ -73,7 +74,11 @@ public class DevMain {
         val str = parser.pluginConfigToString(pluginProps);
         ObjectMapper mapper = new ObjectMapper();
         ExamplePluginConfig config = mapper.readValue(str, ExamplePluginConfig.class);
-        gac.registerBean(ExamplePluginConfig.class, () -> config);
+        if (config == null) {
+            config = ExamplePluginConfig.builder().build();
+        }
+        ExamplePluginConfig finalConfig = config;
+        gac.registerBean(ExamplePluginConfig.class, () -> finalConfig);
         return parser.pluginConfigToString(config);
     }
 

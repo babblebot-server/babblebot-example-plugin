@@ -10,7 +10,7 @@ group 'com.example'
 
 ext {
     mainDevClass = "${project.group}.${rootProject.name}.DevMain".toString()
-    babblebotVersion = 'v3.0.0-rc.26'
+    babblebotVersion = 'v3.0.0-rc.27'
 }
 
 

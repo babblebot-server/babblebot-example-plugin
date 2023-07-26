@@ -5,7 +5,6 @@ import com.example.exampleplugin.command.GetConfigCommand;
 import com.example.exampleplugin.command.ListPeopleCommand;
 import com.example.exampleplugin.command.PingCommand;
 import com.example.exampleplugin.config.ExamplePluginConfig;
-import com.example.exampleplugin.model.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.babblebot.api.command.Command;
@@ -22,11 +21,10 @@ import net.babblebot.api.plugins.Plugin;
  * @author me@bdavies (Ben Davies)
  * @since 1.0.0
  */
-@Plugin
+@Plugin(value = "exampleplugin", author = "Ben Davies <me@bdavies.net>", minServerVersion = "3.0.0-rc.27")
 @RequiredArgsConstructor
 @Slf4j
 public class ExamplePlugin {
-    private final PersonRepository repository;
     private final PingCommand pingCommand;
     private final AddPersonCommand addPersonCommand;
     private final ListPeopleCommand listPeopleCommand;
